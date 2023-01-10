@@ -2,29 +2,29 @@
   <div :class="wrapper">
     <template v-if="type !== 'mobile'">
       <label>
-        <select v-model="currentProvince" :disabled="disabled || provinceDisabled" @change="getCities">
+        <el-select v-model="currentProvince" :disabled="disabled || provinceDisabled" @change="getCities">
           <option :value="placeholders.province">{{ placeholders.province }}</option>
           <option v-for="(item, index) in provinces" :key="index" :value="item">
             {{ item }}
           </option>
-        </select>
+        </el-select>
       </label>
       <template v-if="!onlyProvince">
         <label>
-          <select v-model="currentCity" :disabled="disabled || cityDisabled" @change="getAreas">
+          <el-select v-model="currentCity" :disabled="disabled || cityDisabled" @change="getAreas">
             <option :value="placeholders.city">{{ placeholders.city }}</option>
             <option v-for="(item, index) in cities" :key="index" :value="item">
               {{ item }}
             </option>
-          </select>
+          </el-select>
         </label>
         <label>
-          <select v-if="!hideArea" v-model="currentArea" :disabled="disabled || areaDisabled" @change="changeArea">
+          <el-select v-if="!hideArea" v-model="currentArea" :disabled="disabled || areaDisabled" @change="changeArea">
             <option :value="placeholders.area">{{ placeholders.area }}</option>
             <option v-for="(item, index) in areas" :key="index" :value="item">
               {{ item }}
             </option>
-          </select>
+          </el-select>
         </label>
       </template>
     </template>
@@ -119,9 +119,9 @@ let currentArea = $ref('')
 
 
 let  {  getProvinceList, getCityList, getAreaList, getProvinceVal, getAreaVal, getCityVal, getCodeValue }=useHandler(props)
-  
+
 onBeforeMount(() => {
-  
+
    let provinceVal = props.province
   let cityVal = props.city
      if (isDistCode(props.area)) {
@@ -133,11 +133,11 @@ onBeforeMount(() => {
     }
      let { name:areaName } = getCodeValue(props.area, 'area')
      currentArea = areaName || props.placeholders.area
-  if (isEmpty(currentProvince)) { 
+  if (isEmpty(currentProvince)) {
     let { name: provinceName } = getCodeValue(provinceVal, 'province')
       currentProvince = provinceName || props.placeholders.province
     }
-  if (isEmpty(currentCity)) { 
+  if (isEmpty(currentCity)) {
     let { name: cityName } = getCodeValue(cityVal, 'city')
         currentCity = cityName||props.placeholders.city
     }
@@ -217,9 +217,9 @@ watch(
   }
 )
 
-function setData(value, type) { 
+function setData(value, type) {
   let code=''
-  if (!isEmpty(value)) { 
+  if (!isEmpty(value)) {
       switch (type) {
         case 'area':
         code = currentArea == props.placeholders.area ? '' : getAreaVal(value, true, areas)
@@ -248,7 +248,7 @@ function emit(name) {
   }
   emitEvent(name, data)
 }
-function changeArea() { 
+function changeArea() {
     emitEvent('area', setData(currentArea, 'area'))
     emit('selected')
 }
@@ -257,7 +257,7 @@ function getCities() {
   currentArea = props.placeholders.area
   cities = getCityList(currentProvince)
    emitEvent('province', setData(currentProvince, 'province'))
-  if (props.onlyProvince) { 
+  if (props.onlyProvince) {
       emit('selected')
   }
   cleanList()
@@ -313,7 +313,7 @@ function cleanList() {
   areas = []
 }
 
-function changeAreaCode(areaCode) { 
+function changeAreaCode(areaCode) {
   if (isDistCode(areaCode)) {
     let { provinceCode, cityCode } = autoCompleteDistCode(areaCode, 'area')
     currentProvince = getProvinceVal(provinceCode, false)
